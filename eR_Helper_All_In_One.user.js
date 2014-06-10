@@ -4,9 +4,11 @@
 // @description A context menu for the eR with often used links and some helper Functions: 1.) Fill ePunkt time tracker with default values 2.) "Speichern" und "Vorschau" Buttons oben im Stelleninseratseditor anfügen 3.) CSS Style erweitern 4.) Bewerber erstellen (create1.aspx & create2.aspx) 5.) Kunde erstellen 6.) Kundendetails ausfülen 7.) Benutzerdefinierte Felder beim Kunden befüllen
 // @include     http://staging.epunkt.net/Builds/Beta/eRecruiter/*
 // @include     http://staging.epunkt.net/Builds/Dev/eRecruiter/*
+// @include     http://staging.epunkt.net/Builds/Playground/eRecruiter/*
 // @include     http://localhost:50527/*
 // @include     https://er.epunkt.net/*
-// @version     1.0.5 
+// @include     https://miba-er.epunkt.net/*
+// @version     1.0.6 
 // @require		http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js
 // @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
 // @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ContextMenuHelper.js
@@ -26,8 +28,12 @@
  * v 1.0.3	04.11.2013 add create applicant at create1.aspx & create2.aspx, create company, fill company detail page, fill company customFields
  * v 1.0.4	05.11.2013 add support to use helper for productive system
  * v 1.0.5	11.03.2014 add function to fill user with selected default rights
+ * v 1.0.6	05.06.2014 add color beam to indicate whether user is on live system or in debug system
  *
 */
+
+
+
 var ePunktCssSource = GM_getResourceText("ePunktCss");
 
 eR_Settings_Menu_Width = GM_getValue("settings_Menu_Width", 600);
@@ -61,7 +67,22 @@ eR_Settings_FillCompanyCustomFields_InUse = GM_getValue("eR_Settings_FillCompany
 
 eR_Settings_CheckUsers_DefaultRights_InUse = GM_getValue("eR_Settings_CheckUsers_DefaultRights_InUse", true);
 
+eR_Settings_Color_Beam_InUse = GM_getValue("eR_Settings_Color_Beam_InUse", true);
+eR_Settings_Color_Beam_Inside = GM_getValue("eR_Settings_Color_Beam_Inside", true);
 
+/*
+var html2 = "";
+html2 += "<h5 class='erGM_subHeadline'>";
+html2 += "<input type=\"checkbox\" " + (er_Settings_Color_Beam_Inside ? "checked=\"checked\"" : "") + " id=\"" + er_Settings_Color_Beam_Inside + "\"> ";
+html2 += "blabla" + "</h5>";
+
+alert(er_Settings_Color_Beam_Inside);
+var html2 = "";
+if(er_Settings_Color_Beam_Inside == true){
+	html2 = html2 + "checked='checked'";
+}
+alert(html2);
+*/
 
 //Add CSS style for flat button 
 GM_addStyle(".ePunktButtonFlat { background-color: #00529E; border: medium none; border-radius: 3px 3px 3px 3px; color: #FFFFFF; margin: 4px 4px 4px 4px!important; padding: 3px 7px 3px 7px;}");
@@ -248,9 +269,33 @@ $(function createMenu(){
 var urlPath = getUrlPath();
 var domainPath = getFullDomainPath();
 
+/*** Returns bool if it is a live system or not ***/
+function Is_Productive_System(){
+	//Defines the urls of lice (productive) sytems and the color of the color beam if used
+	var liveSystemArray = new Array(
+		'https://er.epunkt.net',
+		'https://miba-er.epunkt.net'
+    );
+
+	var fullUrl = window.location.href;
+	var found = 0;
+	
+	//Check if url is inside the array and if set the color
+	for (var j = 0; j < liveSystemArray.length; j++) {
+		if(fullUrl.indexOf(liveSystemArray[j]) != -1){
+			found++;
+		}
+	}	
+
+	if(found <= 0){
+		return false;
+	}
+
+	return true;
+}
 
 //only use helpers at productive system when it's activated
-if( ((domainPath.indexOf("https://er.epunkt.net/") != -1) && (eval(eR_Settings_UseAtProductiveSystem)) ) || (domainPath.indexOf("https://er.epunkt.net/") == -1) ){
+if( ( Is_Productive_System()  && (eval(eR_Settings_UseAtProductiveSystem)) ) || !Is_Productive_System() ){
 
 	if(eval(eR_Settings_TimeTracker_InUse)){
 		if(urlPath.indexOf("Modules/TimeTracker") != -1){
@@ -305,6 +350,11 @@ if( ((domainPath.indexOf("https://er.epunkt.net/") != -1) && (eval(eR_Settings_U
 			CheckUsers_DefaultRights_GenerateButton();
 		}
 	}
+	
+	if(eval(eR_Settings_Color_Beam_InUse)){
+		Color_Beam_To_Indicate_System_Type();
+	}
+	
 }
 
 
@@ -431,12 +481,24 @@ function createOverlay() {
 		html += "</div>";
 		html += "<br/>";		
 
+		html += checkbox_Use_Block('eR_Settings_Color_Beam_InUse', "Use color beam to indicate system type", "erGM_SettingBlock_Color_Beam");
+		html += "<div id='erGM_SettingBlock_Color_Beam' " + (eval(eR_Settings_Color_Beam_InUse) ? "" : "class='darkClass'") + ">";
+			var color_Beam_Inside2 = "<input type=\"checkbox\" id=\"er_Settings_Color_Beam_Inside2\" ";
+			if(eR_Settings_Color_Beam_Inside){
+				color_Beam_Inside2 +=  "checked=\"checked\" ";
+			}
+			color_Beam_Inside2 += "> Color beam inside";
+			html += color_Beam_Inside2;
 
+		html += "</div>";
+		html += "<br/>";		
 
 		
 		html += "<br/>";
 		html += "<input class='erSetting_form' id='btn_close1' type='button' value='close'> "; 
         html += "<input class='erSetting_form' id='btn_save' type='button' value='Save'>";
+		
+
 		
         html += "</div>";
 
@@ -457,6 +519,7 @@ function btnClose(){
   //Reload Page because contex menu won't work otherwise (2DO=>Fix it)
   setTimeout(	function(){  content.wrappedJSObject.location=window.location.href; }, 500);	
 }
+
 
 // Save Button
 function btnSave(){
@@ -482,23 +545,23 @@ function btnSave(){
 	  'eR_Settings_FillCompanyDetail_InUse',
 	  'eR_Settings_FillCompanyCustomFields_InUse',
 	  'eR_Settings_CheckUsers_DefaultRights_InUse',
+	  'eR_Settings_Color_Beam_InUse',
 	  'eR_Settings_UseAtProductiveSystem'
     );
 
     for (var i = 0; i < checkboxes.length; i++) {
         GM_setValue(checkboxes[i], document.getElementById(checkboxes[i]).checked);
     }
+	//No idea why this won't work with the .checked attribute, but so it works:
+	//alert('before: ' + eR_Settings_Color_Beam_Inside);
+	GM_setValue("eR_Settings_Color_Beam_Inside", $('#er_Settings_Color_Beam_Inside2').is(':checked'));
+	//alert('after: ' + GM_getValue("eR_Settings_Color_Beam_Inside"));
+
+
 	alert('Settings saved!');
 }
 
 /*** END Overlay ***/
-
-
-
-
-
-
-
 
 
 
@@ -874,3 +937,52 @@ function CheckUsers_DefaultRights_FillForm(){
 	}
 }
 /*** END Fill User with default rights ***/
+
+/*** START Use color beam to indicate system type (live or debug) ***/
+function Color_Beam_To_Indicate_System_Type(){
+
+	var liveSystemArray = new Array(
+	  //[ part of url , color ]
+	  ['er.epunkt.net', 'red' ],
+	  ['miba-er.epunkt.net', 'blue' ],
+	  ['staging.epunkt.net/Builds/Beta/eRecruiter', 'orange']
+    );
+		
+	var fullUrl = window.location.href;
+	var found = 0;
+	
+	//Check if url is inside the array and if set the color
+	for (var j = 0; j < liveSystemArray.length; j++) {
+		if(fullUrl.indexOf(liveSystemArray[j][0]) != -1){
+			if(eR_Settings_Color_Beam_Inside){
+				$('body form#aspnetForm table:first').css('background-color', liveSystemArray[j][1]);
+			}else{
+				GM_addStyle(".ePunktRange {background-color: " + liveSystemArray[j][1] + "; height: 40px; text-align:center;}");
+			}
+			found++;
+		}
+	}	
+	
+	//if url is not inside liveSystemArray mark it as "productive system" and set beam color to red
+	if(found <= 0){ 
+		if(eR_Settings_Color_Beam_Inside){
+			$('body form#aspnetForm table:first').css('background-color', 'green');
+		}else{
+			GM_addStyle(".ePunktRange {background-color: green; height: 40px; text-align:center;}");
+		}
+		
+	}
+
+	if(!eR_Settings_Color_Beam_Inside){
+		var newDiv = document.createElement('div');
+		newDiv.setAttribute('id','ePunktRange');
+		newDiv.setAttribute('class','ePunktRange');
+
+		newDiv.innerHTML = '<a onClick="$(\'#ePunktRange\').hide();" style="cursor: pointer; background: #FFFFFF; border-radius: 6px; display: inline-block; font-weight: bold; margin: 4px; padding: 5px 20px; color: black; text-decoration:none;" >Click to hide!</a>'; 
+
+		$('body').prepend(newDiv);
+	}
+}
+/*** END Use color beam to indicate system type (live or debug) ***/
+
+
