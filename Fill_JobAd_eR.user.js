@@ -3,17 +3,18 @@
 // @namespace   ePunkt
 // @description Füllt alle benötigten Felder in EditJobAd aus um einen Stelleninserat anzulegen
 // @include     http://localhost:50527/Core/Job/EditJobAd.aspx*
-// @include     https://er.epunkt.net/Core/Job/EditJobAd.aspx*
 // @include     http://staging.epunkt.net/Builds/Beta/eRecruiter/Core/Job/EditJobAd.aspx*
 // @include     http://staging.epunkt.net/Builds/Dev/eRecruiter/Core/Job/EditJobAd.aspx*
-// @version     1.0.2
+// @include     https://er.epunkt.net/Core/Job/EditJobAd.aspx*
+// @version     1.0.3
 // @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
 // ==/UserScript==
 
 /* INFO: MUST BE AN EXTRA SCRIPT BECAUSE CKEDITOR CAN NOT BE LOADED OTHERWISE!!!! NO GM _addStyle!!!!!
  * v 1.0.0	10.09.2013 create
  * v 1.0.1	04.11.2013 update sources
- * v 1.0.2	05.11.2013 add support for er.epunkt.net
+ * v 1.0.2	27.12.2013 update includes
+ * v 1.0.3	17.06.2014 add save button on top to bypass scrolling 
 */
 
 
@@ -43,6 +44,7 @@ $(function(){
 */
 
 //alert('Before generate button');
+generateSaveButtonTop();
 generateButton();
 //alert('After generate button');
 
@@ -76,7 +78,7 @@ function fillForm(){
 	
 	var CompanyDescription = "Enter a company description";
 	var CompanyDescriptionChecked = new Boolean(true);
-
+	
 	var instanceBlock1 = CKEDITOR.instances.ctl00_Main_txtBlock1;
 	var instanceBlock2 = CKEDITOR.instances.ctl00_Main_txtBlock2;
 	var instanceBlock3 = CKEDITOR.instances.ctl00_Main_txtBlock3;
@@ -134,4 +136,20 @@ function generateButton(){
 	var parentTD = document.getElementById('ctl00_Main_txtTitle');
 
 	insertAfter(parentTD, input2);
+}
+
+/* GENERATE SAVE BUTTON */
+function generateSaveButtonTop(){
+	//alert('In function "generateSaveButtonTop"');
+
+	var clickEvent = function (e) {
+		$("#ctl00_Main_btnSave").click();
+	} 
+	
+	var input = createInputButtonElement('Save Job Ad', 'SaveButtonTop', 'epunkt-button');
+	input.onclick = clickEvent;
+	input.style.cssFloat = 'right';
+
+	var parentTD = document.getElementById('ctl00_Main_txtTitle');
+	insertAfter(parentTD, input);
 }
