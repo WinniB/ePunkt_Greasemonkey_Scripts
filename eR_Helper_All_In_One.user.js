@@ -9,8 +9,8 @@
 // @include     https://er.epunkt.net/*
 // @include     https://epunkt.erecruiter.net/*
 // @include     https://miba-er.epunkt.net/*
-// @version     1.0.7 
-// @require		http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
+// @version     1.0.8 
+// @require		http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
 // @require		https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
 // @require		https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ContextMenuHelper.js
 // @require		https://raw.githubusercontent.com/medialize/jQuery-contextMenu/master/src/jquery.ui.position.js
@@ -34,12 +34,15 @@
  * v 1.0.4	05.11.2013 add support to use helper for productive system
  * v 1.0.5	11.03.2014 add function to fill user with selected default rights
  * v 1.0.6	05.06.2014 add color beam to indicate whether user is on live system or in debug system
- * v 1.0.7	29.07.2014 add new url for eR and add new jquery version to @require because of error
+ * v 1.0.7	29.07.2014 add new url for eR
+ * v 1.0.8	29.07.2014 add new jquery version to @require because of error
 */
 
 /*
 console.info(GM_info);
 console.info(typeof(GM_getResourceText));
+http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
+http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js
 */
 
 
