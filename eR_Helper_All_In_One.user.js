@@ -7,9 +7,9 @@
 // @include     http://staging.epunkt.net/Builds/Playground/eRecruiter/*
 // @include     http://localhost:50527/*
 // @include     https://er.epunkt.net/*
+// @include     https://epunkt.erecruiter.net/*
 // @include     https://miba-er.epunkt.net/*
-// @version     1.0.6 
-// @require		http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js
+// @version     1.0.7 
 // @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
 // @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ContextMenuHelper.js
 // @require		https://raw.github.com/medialize/jQuery-contextMenu/master/src/jquery.ui.position.js
@@ -29,7 +29,7 @@
  * v 1.0.4	05.11.2013 add support to use helper for productive system
  * v 1.0.5	11.03.2014 add function to fill user with selected default rights
  * v 1.0.6	05.06.2014 add color beam to indicate whether user is on live system or in debug system
- *
+ * v 1.0.7	29.07.2014 add new url for eR and remove require for jquery because of error
 */
 
 
@@ -274,6 +274,7 @@ function Is_Productive_System(){
 	//Defines the urls of lice (productive) sytems and the color of the color beam if used
 	var liveSystemArray = new Array(
 		'https://er.epunkt.net',
+		'https://epunkt.erecruiter.net',
 		'https://miba-er.epunkt.net'
     );
 
@@ -417,7 +418,7 @@ function createOverlay() {
         html += "Setting-Page-Width: <input class='erSetting_form' type='text' size='3' id='settings_Menu_Width' value='" + eval(eR_Settings_Menu_Width) +"'> px" + show_help("With this option you can expand the small layout. The default-value of gc.com is 450 px.") + "<br>";
 
 		var checkbox_UseAtProductiveSystem = checkbox_Use_Block('eR_Settings_UseAtProductiveSystem', "Use Helpers on Productive System", "erGM_SettingBlock_UseAtProductiveSystem");
-		var showHelp_UseAtProductiveSystem = show_help("Decide if helpers are used at productive system (https://er.epunkt.net)") + "</h5>";
+		var showHelp_UseAtProductiveSystem = show_help("Decide if helpers are used at productive system (https://er.epunkt.net. https://epunkt.erecruiter.ne, ...)") + "</h5>";
 		html += checkbox_UseAtProductiveSystem.replace("</h5>",showHelp_UseAtProductiveSystem);
 		html += "<div id='erGM_SettingBlock_UseAtProductiveSystem' " + (eval(eR_Settings_UseAtProductiveSystem) ? "" : "class='darkClass'") + ">";
 		html += "</div>";
@@ -944,6 +945,7 @@ function Color_Beam_To_Indicate_System_Type(){
 	var liveSystemArray = new Array(
 	  //[ part of url , color ]
 	  ['er.epunkt.net', 'red' ],
+	  ['epunkt.erecruiter.net', 'red' ],
 	  ['miba-er.epunkt.net', 'blue' ],
 	  ['staging.epunkt.net/Builds/Beta/eRecruiter', 'orange']
     );
