@@ -10,15 +10,20 @@
 // @include     https://epunkt.erecruiter.net/*
 // @include     https://miba-er.epunkt.net/*
 // @version     1.0.7 
-// @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
-// @require		https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ContextMenuHelper.js
-// @require		https://raw.github.com/medialize/jQuery-contextMenu/master/src/jquery.ui.position.js
-// @require		https://raw.github.com/medialize/jQuery-contextMenu/master/src/jquery.contextMenu.js
-// @resource 	contexMenusCss	https://raw.github.com/medialize/jQuery-contextMenu/master/src/jquery.contextMenu.css
-// @resource 	ePunktCss https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ePunktScriptStyles.css
-// @updateURL 	https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/eR_Helper_All_In_One.user.js
-// @downloadURL https://raw.github.com/WinniB/ePunkt_Greasemonkey_Scripts/master/eR_Helper_All_In_One.user.js
+// @require		http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
+// @require		https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
+// @require		https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ContextMenuHelper.js
+// @require		https://raw.githubusercontent.com/medialize/jQuery-contextMenu/master/src/jquery.ui.position.js
+// @require		https://raw.githubusercontent.com/medialize/jQuery-contextMenu/master/src/jquery.contextMenu.js
+// @resource 	contexMenusCss	https://raw.githubusercontent.com/medialize/jQuery-contextMenu/master/src/jquery.contextMenu.css
+// @resource 	ePunktCss https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ePunktScriptStyles.css
+// @updateURL 	https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/eR_Helper_All_In_One.user.js
+// @downloadURL https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/eR_Helper_All_In_One.user.js
 // @icon		https://er.epunkt.net/favicon.ico
+// @grant		GM_getResourceText
+// @grant		GM_getResourceURL
+// @grant		GM_getValue
+// @grant		GM_addStyle
 // ==/UserScript==
 
 /*
@@ -29,9 +34,13 @@
  * v 1.0.4	05.11.2013 add support to use helper for productive system
  * v 1.0.5	11.03.2014 add function to fill user with selected default rights
  * v 1.0.6	05.06.2014 add color beam to indicate whether user is on live system or in debug system
- * v 1.0.7	29.07.2014 add new url for eR and remove require for jquery because of error
+ * v 1.0.7	29.07.2014 add new url for eR and add new jquery version to @require because of error
 */
 
+/*
+console.info(GM_info);
+console.info(typeof(GM_getResourceText));
+*/
 
 
 var ePunktCssSource = GM_getResourceText("ePunktCss");
@@ -69,6 +78,8 @@ eR_Settings_CheckUsers_DefaultRights_InUse = GM_getValue("eR_Settings_CheckUsers
 
 eR_Settings_Color_Beam_InUse = GM_getValue("eR_Settings_Color_Beam_InUse", true);
 eR_Settings_Color_Beam_Inside = GM_getValue("eR_Settings_Color_Beam_Inside", true);
+
+
 
 /*
 var html2 = "";
