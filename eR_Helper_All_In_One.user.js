@@ -9,8 +9,8 @@
 // @include     https://er.epunkt.net/*
 // @include     https://epunkt.erecruiter.net/*
 // @include     https://miba-er.epunkt.net/*
-// @version     1.0.8 
-// @require		http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
+// @version     1.0.9 
+// @require		https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js
 // @require		https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/HelperFunctions.js
 // @require		https://raw.githubusercontent.com/WinniB/ePunkt_Greasemonkey_Scripts/master/ContextMenuHelper.js
 // @require		https://raw.githubusercontent.com/medialize/jQuery-contextMenu/master/src/jquery.ui.position.js
@@ -23,6 +23,7 @@
 // @grant		GM_getResourceText
 // @grant		GM_getResourceURL
 // @grant		GM_getValue
+// @grant		GM_setValue
 // @grant		GM_addStyle
 // ==/UserScript==
 
@@ -36,6 +37,8 @@
  * v 1.0.6	05.06.2014 add color beam to indicate whether user is on live system or in debug system
  * v 1.0.7	29.07.2014 add new url for eR
  * v 1.0.8	29.07.2014 add new jquery version to @require because of error
+ * v 1.0.9	08.09.2014 add new jquery version to @require because of error, grant GM_setValue
+ * v 1.0.10	016.09.2014 fix bug with loading jquery
 */
 
 /*
@@ -43,6 +46,9 @@ console.info(GM_info);
 console.info(typeof(GM_getResourceText));
 http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
 http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js
+http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js
+
+http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
 */
 
 
@@ -83,28 +89,16 @@ eR_Settings_Color_Beam_InUse = GM_getValue("eR_Settings_Color_Beam_InUse", true)
 eR_Settings_Color_Beam_Inside = GM_getValue("eR_Settings_Color_Beam_Inside", true);
 
 
-
-/*
-var html2 = "";
-html2 += "<h5 class='erGM_subHeadline'>";
-html2 += "<input type=\"checkbox\" " + (er_Settings_Color_Beam_Inside ? "checked=\"checked\"" : "") + " id=\"" + er_Settings_Color_Beam_Inside + "\"> ";
-html2 += "blabla" + "</h5>";
-
-alert(er_Settings_Color_Beam_Inside);
-var html2 = "";
-if(er_Settings_Color_Beam_Inside == true){
-	html2 = html2 + "checked='checked'";
-}
-alert(html2);
-*/
-
 //Add CSS style for flat button 
 GM_addStyle(".ePunktButtonFlat { background-color: #00529E; border: medium none; border-radius: 3px 3px 3px 3px; color: #FFFFFF; margin: 4px 4px 4px 4px!important; padding: 3px 7px 3px 7px;}");
 
+//Avoid conflicts
+this.$ = this.jQuery = jQuery.noConflict(true);
+
 // ausführen wenn die Html-Seite geladen wurde
-unsafeWindow.$(document).ready(function(){
+$(document).ready(function(){
 	// reagieren, wenn im Browserfenster eine Taste gedrückt wurde
-	unsafeWindow.$(document).keypress(function(e) {
+	$(document).keypress(function(e) {
 		// ausführen wenn Taste 'strg' + 'xxxxx' gedrückt wurde (default: '^')
 		// als Zahl die Ascii-Nummer
 		if (e.ctrlKey && e.which == eval(eR_Settings_MenuShortCutKey)){ //94 =>^   35 => '#'
