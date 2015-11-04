@@ -1,0 +1,28 @@
+<script id="modalTemplate" type="x-tmpl-mustache">   
+	<!-- Modal -->
+	<div class="modal fade" id="{{ModalIdentifier}}" tabindex="-1" role="dialog" aria-labelledby="{{ModalIdentifier}}Label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="{{ModalIdentifier}}Label">{{ModalTitel}}</h4>
+				</div>
+				<div class="modal-body">
+					{{ModalBody}}
+					{{>modalBodyPartial}}
+				</div>
+				<div class="modal-footer">
+					{{ModalFooter}}		
+					{{>modalFooterPartial}}
+
+					{{#saveButton}}
+						<button type="button" class="btn btn-primary">Save changes</button>
+					{{/saveButton}}
+					{{#closeButton}}
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					{{/closeButton}}
+				</div>
+			</div>
+		</div>
+	</div>
+</script> 
