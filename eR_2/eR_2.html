@@ -29,7 +29,7 @@
 
 
 <script id="inputTextTemplate" type="x-tmpl-mustache"> 
-	<div class="form-group">
+	<div class="form-group clearfix">
 		<label class="col-sm-4 control-label" for="{{InputTextIdentifier}}">
 			{{InputTextLabel}}
 		</label>
@@ -38,3 +38,12 @@
 		</div>		
 	</div>
 </script>
+
+<script id="verticalBtnGroupTemplate" type="x-tmpl-mustache"> 
+	<div class="btn-group-vertical" role="group" aria-label="...">
+		{{#buttons}}
+			<a href="{Link}}" class="btn btn-default">{{Name}}</a>
+		{{/buttons}}
+	</div>
+</script>
+
